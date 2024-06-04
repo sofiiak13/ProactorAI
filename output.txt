@@ -1,0 +1,17 @@
+This is a report.
+==================================================================================
+Site	Percentage
+site01	0
+site02	0
+site03	0
+site04	0
+site05	0
+site06	50
+site07	50
+site08	0
+site09	50
+site10	87.0967741935484
+site11	0
+stg012	0
+site13	0
+site14	0
