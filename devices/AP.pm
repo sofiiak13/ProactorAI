@@ -1,33 +1,32 @@
 #
-# Title: Router.pm
+# Title: AP.pm
 # Authors: Sofiia Khutorna, Rem D'Ambrosio
-# Created: 2024-05-15
-# Description: object to hold router info
+# Created: 2024-05-24
+# Description: object to hold Access Point info
 #
 
-
-package Router;
+package AP;
 use Data::Dumper qw(Dumper);
 
 # Subroutine Name: new()
-# Example use: Router->new(\%params)
+# Example use: AP->new(\%params)
 # Description:
-#     creates a new Router object
+#     creates a new AP object
 # Parameters:
-#     %params: hash with router's parameters
+#     %params: hash with AP's parameters
 # Return:
-#     $self: new Router object
+#     $self: new AP object
 sub new {
     my $class = shift;
     my $param = shift;
 
     # Default values
-    my $router_name = defined($param->{router_name}) ? $param->{router_name} : 'no_router_name';
+    my $ap_name = defined($param->{ap_name}) ? $param->{ap_name} : 'no_ap_name';
     my $site_code = defined($param->{site_code}) ? $param->{site_code} : 'no_site_code';
     my $alpha_ping = defined($param->{alpha_ping}) ? $param->{alpha_ping} : 'no_ping';
 
     my $self = {
-        router_name => $router_name,
+        ap_name => $ap_name,
         site_code => $site_code,
         alpha_ping => $alpha_ping
     };
@@ -39,31 +38,31 @@ sub new {
 # Subroutine Name: TO_JSON
 # Example use: 
 # Description:
-#     allows Router objects to be converted to a json with convert_blessed(1)
+#     allows AP objects to be converted to a json with convert_blessed(1)
 # Parameters:
 #     none
 # Return:
 #     none
 sub TO_JSON { return { %{ shift() } }; }
 
-# Subroutine Name: update_router()
-# Example use: router->update_router(\%params)
+# Subroutine Name: update_ap()
+# Example use: ap->update_ap(\%params)
 # Description:
-#     updates all values in router's attribute hash
+#     updates all values in AP's attribute hash
 # Parameters:
 #     %params: hash with new parameters
 # Return:
 #     none
-sub update_router {
+sub update_ap {
     my $self = shift;
     my $param = shift;
 
-    $self->{router_name} = $param->{router_name} if defined($param->{router_name});
+    $self->{ap_name} = $param->{ap_name} if defined($param->{ap_name});
     $self->{site_code} = $param->{site_code} if defined($param->{site_code});
     $self->{alpha_ping} = $param->{alpha_ping} if defined($param->{alpha_ping});
 }
 
-sub get_router_info {
+sub get_ap_info {
     $self = shift;
     return $self;
 }

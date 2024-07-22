@@ -6,9 +6,9 @@
 #
 
 package Site;
-
+use Data::Dumper qw(Dumper);
 # Subroutine Name: new()
-# Example use: 
+# Example use: Site->new(\%params)
 # Description:
 #     creates a new site object
 # Parameters:
@@ -27,6 +27,7 @@ sub new {
     my $routers = defined($param->{routers}) ? $param->{routers} : [];
     my $switches = defined($param->{switches}) ? $param->{switches} : [];
     my $aps = defined($param->{aps}) ? $param->{aps} : [];
+    my $starlinks = defined($param->{starlinks}) ? $param->{starlinks} : [];
 
     my $self = {
         site_code => $site_code,
@@ -35,7 +36,8 @@ sub new {
         lng => $lng,
         routers => $routers,
         switches => $switches,
-        aps => $aps
+        aps => $aps,
+        starlinks => $starlinks
     };
 
     bless $self, $class;
@@ -55,7 +57,7 @@ sub TO_JSON { return { %{ shift() } }; }
 
 
 # Subroutine Name: update_site()
-# Example use: 
+# Example use: Site->update_site(\%params)
 # Description:
 #     updates all values in site's attribute hash
 # Parameters:
@@ -73,6 +75,7 @@ sub update_site {
     push @{$self->{routers}}, @{$param->{routers}} if defined($param->{routers});
     push @{$self->{switches}}, @{$param->{switches}} if defined($param->{switches});
     push @{$self->{aps}}, @{$param->{aps}} if defined($param->{aps});
+    push @{$self->{starlinks}}, @{$param->{starlinks}} if defined($param->{starlinks});
 
     return;
 }

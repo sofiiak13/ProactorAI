@@ -1,5 +1,5 @@
 #
-# Title: data_analyzer.pl
+# Title: data_analyzer.pm
 # Authors: Sofiia Khutorna, Rem D'Ambrosio
 # Created: 2024-05-13
 # Description: object to analyze data from data_merger
@@ -7,12 +7,14 @@
 
 package data_analyzer;
 
+use Data::Dumper qw(Dumper);
+
 # Subroutine Name: new()
-# Example use: 
+# Example use: data_analyzer->new()
 # Description:
-#     create a data_analyzer object to analyze data from data_merger
+#     create a data_analyzer object to analyze data froma a hardcopied file or directly from data_merger
 # Parameters:
-#     $filename
+#     $filename OR $data_merger object
 # Return:
 #     $self: new data_analyzer object
 sub new {
@@ -21,6 +23,9 @@ sub new {
         data => {},
         sites_hash => {},
         routers_hash => {},
+        switches_hash => {},
+        aps_hash => {},
+        type => "",
         analysis => {}
     };
     bless $self, $class;
@@ -31,22 +36,23 @@ sub new {
         $self->read_data($filename);
         $self->build_sites();
         $self->build_routers();
+        $self->build_switches();
+        $self->build_aps();
     } else {
         my $data_merger = $arg;
         $self->get_devices($data_merger);
     }
-    $self->analyze_data();
     return $self;
 }
 
 # Subroutine Name: read_data()
-# Example use: 
+# Example use: data_analyzer->read_data($filename)
 # Description:
 #     analyze data from input database file
 # Parameters:
 #     $filename
 # Return:
-#     data
+#     $data
 sub read_data {
     my $self = shift;
     my $filename = shift;
@@ -58,7 +64,7 @@ sub read_data {
 }
 
 # Subroutine Name: build_sites()
-# Example use: 
+# Example use: data_analyzer->build_sites()
 # Description:
 #     read data from a string representing sites, turn them back into Site objects and update sites_hash
 # Parameters:
@@ -77,7 +83,7 @@ sub build_sites {
 }
 
 # Subroutine Name: build_routers()
-# Example use: 
+# Example use: data_analyzer->build_routers()
 # Description:
 #     read data from a string representing routers, turn them back into Router objects and update routers_hash
 # Parameters:
@@ -96,8 +102,46 @@ sub build_routers {
     return;
 }
 
+# Subroutine Name: build_switches()
+# Example use: data_analyzer->build_switches()
+# Description:
+#     read data from a string representing switches, turn them back into Switch objects and update switches_hash
+# Parameters:
+#     none
+# Return:
+#     none
+sub build_switches {
+    my $self = shift;
+    my $switches = $self->{data}{switches};
+    foreach my $switch (keys %$switches) {
+        my $new_switch_params = $switch->{$switch};
+        my $new_switch = Switch->new($new_switch_params);
+        $self->{switches_hash}{$switch} = $new_switch;
+    }
+    return;
+}
+
+# Subroutine Name: build_aps()
+# Example use: data_analyzer->build_aps()
+# Description:
+#     read data from a string representing aps, turn them back into AP objects and update aps_hash
+# Parameters:
+#     none
+# Return:
+#     none
+sub build_aps {
+    my $self = shift;
+    my $aps = $self->{data}{aps};
+    foreach my $ap (keys %$aps) {
+        my $new_ap_params = $ap->{$ap};
+        my $new_ap = AP->new($new_ap_params);
+        $self->{aps_hash}{$ap} = $new_ap;
+    }
+    return;
+}
+
 # Subroutine Name: get_devices()
-# Example use: 
+# Example use: data_analyzer->get_devices()
 # Description:
 #     gets data of all devices directly from data_merger object and updates attributes of data_analyzer
 # Parameters:
@@ -110,21 +154,25 @@ sub get_devices {
 
     $self->{sites_hash} = $data_merger->get_sites();
     $self->{routers_hash} = $data_merger->get_routers();
+    $self->{switches_hash} = $data_merger->get_switches();
+    $self->{aps_hash} = $data_merger->get_aps();
     return;
 }
 
-# Subroutine Name: analyze_data()
-# Example use: 
+# Subroutine Name: percentage_routers_up()
+# Example use: data_analyzer->percentage_routers_up()
 # Description:
-#     analyze data
+#     finds sites with < 100% of their routers up
 # Parameters:
 #     none
 # Return:
-#     analysis
-sub analyze_data {
+#     none
+sub percentage_routers_up {
     my $self = shift;
     my $sites = $self->{sites_hash};
     my $routers = $self->{routers_hash};
+
+    $self->{type} = "pru";        #label for reporter
 
     foreach my $site (%$sites) {
         if ($site->{routers}) {
@@ -133,7 +181,7 @@ sub analyze_data {
             my $total_ping = 0;
             foreach my $router_name (@router_list) {
                 my $router = $routers->{$router_name};
-                my $ping = $router->{alpha_ping};
+                my $ping = $router->{alpha_api_ping};
                 if ($ping) {
                     if ($ping eq "up") {
                         $total_ping += 100;
@@ -159,7 +207,7 @@ sub analyze_data {
 # Subroutine Name: get_analysis()
 # Example use: data_analyzer->get_analysis()
 # Description:
-#     used to get analysis
+#     used to get analysis for report
 # Parameters:
 #     none
 # Return:
@@ -167,6 +215,19 @@ sub analyze_data {
 sub get_analysis {
     my $self = shift;
     return $self->{analysis};
+}
+
+# Subroutine Name: get_type()
+# Example use: data_analyzer->get_type()
+# Description:
+#     used to get analysis type for report
+# Parameters:
+#     none
+# Return:
+#     $type
+sub get_type {
+    my $self = shift;
+    return $self->{type};
 }
 
 1;
