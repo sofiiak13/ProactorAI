@@ -1,5 +1,14 @@
-# ProactorAI
+# Anonymized version of ProactorAI
+Rem D'Ambrosio and I developed this program under the supervision of Tariq Chatur during the Summer 2024 Co-op term at BCPS. 
+### v0.0
+The script pulls some device information from various large-scale APIs, sorts and stores appropriately. 
+Then, it analyzes "health" of all devices at a site and creates a report with sites that are not 100% healthy. An example of the report appears in output.txt file.
+This version 0.0 is written fully in Perl and it does not use any AI algorithms.
 
-Anonymized version of ProactorAI program that pulls some device information from various APIs, sorts and stores appropriately. Then, it analyzes "health" of a site and creates a report with sites that are not 100% healthy. An example of the report appears in output.txt file.
+### v0.1
 
-Rem D'Ambrosio and I developed this program under the supervision of Tariq Chatur during the Summer 2024 Co-op term. 
+The script pulls historical information over a year period about all the devices in order to populate a dataset for trainig and validation. 
+In this version, we use KNN for the binary classification of healthy and unhealthy devices (switches).
+In order to find best k, we efficiently try different values in some specified range. 
+Due to the number of healthy devices outweighing unhealthy devices, we also tried using weights with KNN. It is available under WeightedKNN.py.
+This version 0.1 is written in Perl and Python and it uses a Machine Learning algorithm (KNN) for analysis.
