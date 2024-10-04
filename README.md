@@ -15,4 +15,4 @@ This version 0.1 is written in Perl and Python and it uses a Machine Learning al
 
 ### v0.2
 
-Version 0.2 pulls information the same way version v0.1 does, however analyzing part is different. In this version, we use Regular Neural Networks in order to identify which device is failing and which one is healthy. We also try comparing BCE VS BCEWithLogits, drop out VS no drop out etc. 
+Version 0.2 pulls information and stores it in device objects the same way version v0.1 does, however analyzing part is different. In this version, we use Regular Neural Networks in order to identify which device is failing and which one is healthy. We also try comparing BCE VS BCEWithLogits, drop out VS no drop out etc. 
