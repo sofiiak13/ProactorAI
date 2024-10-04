@@ -12,3 +12,7 @@ In this version, we use KNN for the binary classification of healthy and unhealt
 In order to find best k, we efficiently try different values in some specified range. 
 Due to the number of healthy devices outweighing unhealthy devices, we also tried using weights with KNN. It is available under WeightedKNN.py.
 This version 0.1 is written in Perl and Python and it uses a Machine Learning algorithm (KNN) for analysis.
+
+### v0.2
+
+Version 0.2 pulls information the same way version v0.1 does, however analyzing part is different. In this version, we use Regular Neural Networks in order to identify which device is failing and which one is healthy. We also try comparing BCE VS BCEWithLogits, drop out VS no drop out etc. 
